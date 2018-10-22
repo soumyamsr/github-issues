@@ -1,0 +1,58 @@
+.row-centered, .text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.hide {
+  display: none;
+}
+
+.error-message {
+  color: rgb(169, 66, 66);
+}
+
+.root-container {
+  padding: 20px 0 40px;
+}
+
+.root-container .header-text {
+  margin: 10px 0 40px;
+}
+
+.github-username-form {
+  padding-bottom: 30px;
+}
+
+.github-repo-wrap, .github-repo-error {
+  padding: 0 15px;
+}
+
+.github-repo-wrap .github-repo {
+  align-items: center;
+  display: flex;
+  padding: 5px 5px 5px 0 !important;
+  color: rgb(80, 79, 79);
+}
+
+.github-repo-wrap .github-repo:nth-child(odd) {
+  background-color: rgb(218, 216, 216);
+}
+
+.github-repo-wrap .github-repo:nth-child(even) {
+  background-color: rgb(249, 249, 249);
+}
+
+.modal .issue-form .input-group {
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 768px) {
+
+}
