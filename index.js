@@ -1,7 +1,3 @@
-// window.addEventListener('load', function() {
-//   init();
-// });
-
 function fetchRepo() {
   var user = document.getElementById('username').value.trim();
   if (!user) {
