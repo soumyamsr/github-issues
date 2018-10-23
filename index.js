@@ -3,15 +3,19 @@ function fetchRepo() {
   if (!user) {
     return false;
   }
+  var accessToken = document.getElementById('accessToken').value;
   $.ajax({
     type: 'GET',
     url: `https://api.github.com/users/${user}/repos`,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
+    headers: {
+      'Authorization': 'token ' + accessToken
+    },
     beforeSend: () => {
       document.querySelector('.github-repo-error').classList.add('hide');
       document.querySelector('.github-repo-wrap').innerHTML = '';
-      // pending: loader addition
+      document.getElementById('loader').classList.remove('hide');
     },
     success: (response) => {
       document.querySelector('.github-repo-wrap').innerHTML = getRepoHtmlString(response, user);
@@ -20,7 +24,7 @@ function fetchRepo() {
       document.querySelector('.github-repo-error').classList.remove('hide');
     },
     complete: () => {
-      // pending: loader removal
+      document.getElementById('loader').classList.add('hide');
     }
   });
   return false;
@@ -46,9 +50,12 @@ function openIssueModal(user, repo) {
 function addIssue() {
   var user = document.getElementById('issueModal').getAttribute('data-user');
   var repo = document.getElementById('issueModal').getAttribute('data-repo');
-  var title = document.getElementById('issueName').value;
-  var description = document.getElementById('issueDescription').value;
+  var title = document.getElementById('issueName').value.trim();
+  var description = document.getElementById('issueDescription').value.trim();
   var accessToken = document.getElementById('accessToken').value;
+  if (!title || !description) {
+    return false;
+  }
   $.ajax({
     type: 'POST',
     url: `https://api.github.com/repos/${user}/${repo}/issues`,
@@ -56,26 +63,34 @@ function addIssue() {
       title: title,
       body: description
     }),
+    headers: {
+      'Authorization': 'token ' + accessToken
+    },
     beforeSend: (xhr) => {
-      xhr.setRequestHeader('Authorization', 'token ' + accessToken);
-      // pending: loader addition
+      document.getElementById('loader').classList.remove('hide');
     },
     success: (response) => {
       document.querySelector('.create-issue-wrapper').classList.add('hide');
+      document.querySelector('.modal-failure').classList.add('hide');
       document.querySelector('.modal-success').classList.remove('hide');
-      document.querySelector('.issue-id').innerHTML = response.id;
+      document.querySelector('.issue-id').innerHTML = response.id;   
+    },
+    error: (error) => {
+      document.querySelector('.create-issue-wrapper').classList.add('hide');
+      document.querySelector('.modal-failure').classList.remove('hide');
+      document.querySelector('.modal-success').classList.add('hide');
+    },
+    complete: () => {
+      document.getElementById('loader').classList.add('hide');
       setTimeout(function() {
+        document.getElementById('issueName').value = '';
+        document.getElementById('issueDescription').value = '';
         document.querySelector('.create-issue-wrapper').classList.remove('hide');
+        document.querySelector('.modal-failure').classList.add('hide');
         document.querySelector('.modal-success').classList.add('hide');
         document.querySelector('.issue-id').innerHTML = '';
         $('#issueModal').modal('hide');
       }, 2000);
-    },
-    error: (error) => {
-      // pending: show error message
-    },
-    complete: () => {
-      // pending: loader removal
     }
   });
 }
