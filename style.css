@@ -73,3 +73,7 @@
   justify-content: center;
   background: rgba(223, 221, 221, 0.6);
 }
+
+#loader i {
+  font-size: 30px;
+}
